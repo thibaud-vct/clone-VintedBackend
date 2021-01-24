@@ -1,0 +1,5 @@
+node_modules
+.env
+middleware/uploadFiles.js
+routes/importdata.js
+package-lock.json
