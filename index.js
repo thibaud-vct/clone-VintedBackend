@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require("express");
 const formidable = require("express-formidable");
 const mongoose = require("mongoose");
@@ -22,10 +23,12 @@ cloudinary.config({
 
 const userRoutes = require("./routes/user");
 app.use(userRoutes);
+
 const offerRoutes = require("./routes/offer");
 app.use(offerRoutes);
 
 app.all("*", (req, res) => {
     res.status(400).json({ message: "not route" });
 });
+
 app.listen(process.env.PORT, () => {});

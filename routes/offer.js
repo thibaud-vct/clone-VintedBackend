@@ -2,7 +2,6 @@ const express = require("express");
 const router = express.Router();
 const cloudinary = require("cloudinary").v2;
 const isAuthenticated = require("../middleware/isAuthenticated");
-require("dotenv").config();
 
 const Offer = require("../models/Offer");
 const User = require("../models/User");
