@@ -40,7 +40,7 @@ router.post("/offer/publish", isAuthenticated, async (req, res) => {
                 owner: req.user,
             });
             // We upload the file to our Cloudinary cloud with a specific path
-            const file = await cloudinary.uploader.unsigned_upload(
+            const file = await cloudinary.uploader.upload(
                 // faille à amelioré ------
                 req.files.picture.path,
                 {
