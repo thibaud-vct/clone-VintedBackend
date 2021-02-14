@@ -181,7 +181,7 @@ router.get("/offers", async (req, res) => {
         };
         // We launch the search in the database to find the number of offers
         const countOffers = await Offer.countDocuments(filter);
-        // We launch the search in the database
+        // We launch the search in the database for create an offers' array
         const offers = await Offer.find(filter)
             .sort({
                 product_price: sort,
@@ -189,8 +189,8 @@ router.get("/offers", async (req, res) => {
             .limit(numberOfOffers)
             .skip(page)
             .populate("owner", "account");
-        // We return the number of offers and a table of offers
-        res.status(200).json({ count: countOffers.length, offers: [offers] });
+        // We return the number of offers and a offers' array
+        res.status(200).json({ count: countOffers.length, offers: offers });
     } catch (error) {
         res.status(400).json({ message: error.message });
     }
