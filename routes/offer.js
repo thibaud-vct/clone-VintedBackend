@@ -1,11 +1,30 @@
 const express = require("express");
 const router = express.Router();
 const cloudinary = require("cloudinary").v2;
+const stripe = require("stripe")(process.env.STRIPE_KEY_SECRET);
 const isAuthenticated = require("../middleware/isAuthenticated");
 
 const Offer = require("../models/Offer");
 const User = require("../models/User");
 
+// Pay offer
+router.post("/offer/payment", async (req, res) => {
+    const { stripeToken, offer_id, user_id } = req.fields;
+    try {
+        const offerInCart = await Offer.findById(offer_id);
+        const response = await stripe.charges.create({
+            amount: offerInCart.product_price * 100,
+            currency: "eur",
+            description: offerInCart.product_name,
+            source: stripeToken,
+        });
+        console.log(response);
+        // todo and save transaction
+        res.status(200).json("succeeded");
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
+});
 router.post("/offer/publish", isAuthenticated, async (req, res) => {
     try {
         // We filter data that is too long to create an ad
@@ -181,7 +200,6 @@ router.get("/offers", async (req, res) => {
         };
         // We launch the search in the database to find the number of offers
         const countOffers = await Offer.countDocuments(filter);
-        console.log(countOffers);
         // We launch the search in the database for create an offers' array
         const offers = await Offer.find(filter)
             .sort({
